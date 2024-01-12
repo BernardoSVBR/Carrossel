@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Carrosel</title>
+    <style>
+        * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+#vid1 {
+  height: 100vh;
+  width: 100vw;
+  background-color: black;
+  margin: 0em;
+  overflow: hidden;
+
+}
+
+#image-track {
+  display: flex;
+  gap: 4vmin;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(0%, -50%);
+
+}
+.image {
+  width: 40vmin;
+  height: 56vmin;
+  object-fit: cover;
+  object-position: 100% 50%;
+}
+    </style>
+  </head>
+  <body id="vid1">
+    <div id="image-track" data-mouse-down-at="0" data-prev-percentage="0">
+      <img
+        src="https://images.unsplash.com/photo-1676046110191-e4a6873a5d0b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDE5fGJvOGpRS1RhRTBZfHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
+        alt="image"
+        class="image"
+        draggable="false"
+      />
+      <img
+        src="https://images.unsplash.com/photo-1676487897165-2e9f9f6e63b7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDh8Ym84alFLVGFFMFl8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
+        alt="image"
+        class="image"
+        draggable="false"
+      />
+      <img
+        src="https://images.unsplash.com/photo-1675937695032-e0ef7f5c1644?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDI1fGJvOGpRS1RhRTBZfHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
+        alt="image"
+        class="image"
+        draggable="false"
+      />
+      <img
+        src="https://images.unsplash.com/photo-1675752625310-45f622ddf63b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDI2fGJvOGpRS1RhRTBZfHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
+        alt="image"
+        class="image"
+        draggable="false"
+      />
+      <img
+        src="https://images.unsplash.com/photo-1675715194978-fb6fc22f49c6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDMxfGJvOGpRS1RhRTBZfHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
+        alt="image"
+        class="image"
+        draggable="false"
+      />
+      <img
+        src="https://images.unsplash.com/photo-1675526193131-83c24921f33c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDQ1fGJvOGpRS1RhRTBZfHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
+        alt="image"
+        class="image"
+        draggable="false"
+      />
+      <img
+        src="https://images.unsplash.com/photo-1623780531038-0f37f1e09c4c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDU5fGJvOGpRS1RhRTBZfHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
+        alt="image"
+        class="image"
+        draggable="false"
+      />
+    </div>
+
+    <script>
+      const track = document.getElementById('image-track');
+
+      window.onmousedown = (e) => {
+        track.dataset.mouseDownAt = e.clientX;
+      };
+
+      window.onmouseup = (e) => {
+        track.dataset.mouseDownAt = '0';
+        track.dataset.prevPercentage = track.dataset.percentage;
+      };
+
+      window.onmousemove = (e) => {
+        if (track.dataset.mouseDownAt === '0') return;
+
+        const mouseDelta = parseFloat(track.dataset.mouseDownAt) - e.clientX,
+          maxDelta = window.innerWidth / 2;
+
+        const percentage = (mouseDelta / maxDelta) * -100,
+          nextPercentage = Math.min(Math.max(parseFloat(track.dataset.prevPercentage) + percentage, -100), 0);
+
+        track.dataset.percentage = nextPercentage;
+
+        track.animate({
+          transform: `translate(${nextPercentage}%, -50%)`
+        },{duration:1200, fill:"forwards"})
+
+        for(const image of track.getElementsByClassName("image")){
+        image.animate({
+          objectPosition: `${100+nextPercentage}% center`
+        },{duration:1200, fill:"forwards"})
+      }
+      };
+    </script>
+  </body>
+</html>
